@@ -1,0 +1,87 @@
+* {
+    box-sizing: border-box;
+}
+#header{
+    width: 100%;
+    hight: auto;
+    float: left;
+    background-color: white;
+    border-style: solid;
+    border-color:black;
+    top: 0;
+    min-height: 25px;
+    position:fixed;
+}
+#header-img{
+    width: 25%;
+    hight: auto;
+    max-width: 30px;
+    float: left;
+    margin-left: 120px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#nav-link01{
+    width: 15%;
+    float: right;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#nav-link02{
+    width: 15%;
+    float: right;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#nav-link03{
+    width: 15%;
+    float: right;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#newfeatures{
+  background-color: white;
+  font-family:"Trebuchet MS", Helvetica, sans-serif;
+  text-align:center;
+  margin-top:50px;
+}
+#pricing{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+ @media (max-width: 768px){
+    #pricing{flex-direction: columns;}
+  }
+
+#bundles{
+  display: flex;
+  flex-direction: columns;
+  justify-content: center;
+  text-align: center;
+}
+.set{
+  max-width: 100%; 
+  display: block; 
+  height: auto;
+  margin: auto;
+  height: 125px;
+  width: 150px;
+  text-align: left;
+}
+h2{
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+#submit{
+  margin-top: 12px;
+}
+#videocontainer{
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+#video{
+  max-width:560px;
+  width: 100%;
+}
