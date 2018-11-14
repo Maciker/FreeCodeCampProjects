@@ -15,7 +15,7 @@
 #header-img{
     width: 25%;
     hight: auto;
-    max-width: 30px;
+    max-width: 60px;
     float: left;
     margin-left: 120px;
     margin-top: 5px;
@@ -47,19 +47,23 @@
 }
 #pricing{
   display: flex;
+  align-items: center;
   flex-direction: row;
-  justify-content: center;
-}
- @media (max-width: 768px){
-    #pricing{flex-direction: columns;}
-  }
-
-#bundles{
-  display: flex;
-  flex-direction: columns;
-  justify-content: center;
   text-align: center;
+  justify-content: center;
+  
+  #bundle1 #bundle2 #bundle3 {
+  display: flex;
+  align-items: center;
+  flex-direction: comlumn;
+  text-align: center;
+  justify-content: center;
 }
+}
+    @media (max-width: 800px){
+      #pricing{flex-direction: column;}
+}
+
 .set{
   max-width: 100%; 
   display: block; 
