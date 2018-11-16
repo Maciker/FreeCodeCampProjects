@@ -1,0 +1,103 @@
+<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+<!DOCTYPE html>
+<html>
+  <title>Technical Documentation Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<nav id="navbar">
+  <header id="listheader">
+    PyQGIS Cookbook
+  </header>
+  <ul id="listul">
+    <li><a class="nav-link" href="#Introduction">Introduction</a></li>
+    <li><a class="nav-link" href="#Loading_Projects">Loading Projects</a></li>
+    <li><a class="nav-link" href="#Loading_Layers">Loading Layers</a></li>
+    <li><a class="nav-link" href="#Using_Raster_Layers">Using Raster Layers</a></li>
+    <li><a class="nav-link" href="#Using_Vector_Layers">Using Vector Layers</a></li>
+    <li><a class="nav-link" href="#Geometry_Handling">Geometry Handling</a></li>
+    <li><a class="nav-link" href="#Projections_Support">Projections Support</a></li>
+    <li><a class="nav-link" href="#Using_Map_Canvas">Using Map Canvas</a></li>
+    <li><a class="nav-link" href="#Map_Rendering_and_Printing">Map Rendering and Printing</a></li>
+    <li><a class="nav-link" href="#Expressions_Filtering_and_Calculating_Values">Expressions Filtering and Calculating Values</a></li>
+    <li><a class="nav-link" href="#Reading_And_Storing_Settings">Reading And Storing Settings</a></li>
+    <li><a class="nav-link" href="#Communicating_with_the_user">Communicating with the user</a></li>
+</nav>
+  <main id="main-doc">
+  <section id="Introduction" class="main-section">
+    <header>Introduction</header>
+    <p>This document is intended to be both a tutorial and a reference guide. While it does not list all possible use cases, it should give a good overview of the principal functionality.<br>Python support was first introduced in QGIS 0.9. Today, there are several ways to use Python in QGIS Desktop, they are covered in the following sections:<br>
+    <ul><li>Issue commands in the Python console within QGIS</li><br>
+      <li>Create and use plugins</li><br>
+      <li>Automatically run Python code when QGIS starts</li><br>
+      <li>Create custom applications based on the QGIS API</li>
+    </ul>
+    </p>
+  </section>
+  <section id="Loading_Projects" class="main-section">
+    <header>Loading Projects</header>
+    <p>Sometimes you need to load an existing project from a plugin or (more often) when developing a standalone QGIS Python application (see: Python Applications).<br>
+
+To load a project into the current QGIS application you need to create a QgsProject instance() object and call its read() method passing the path of the project to be loaded:</p>
+    <code># If you are not inside a QGIS console you first need to import<br>
+# qgis and PyQt classes you will use in this script as shown below:<br>
+from qgis.core import QgsProject<br>
+# Get the project instance
+project = QgsProject.instance()</code>
+  </section>
+    <section id="Loading_Layers" class="main-section">
+    <header>Loading Layers</header>
+      <ul><li>Vector Layers: <br><p>To load a vector layer, specify layer’s data source identifier, name for the layer and provider’s name:<br></p><code>layer = QgsVectorLayer(data_source, layer_name, provider_name)<br>
+if not layer.isValid():<br>
+  print("Layer failed to load!")</code></li>
+        <li>Raster Layers: <br><p>For accessing raster files, GDAL library is used. It supports a wide range of file formats. In case you have troubles with opening some files, check whether your GDAL has support for the particular format (not all formats are available by default). To load a raster from a file, specify its filename and display name:<br></p><code>rlayer = QgsRasterLayer("/path/to/raster/file.tif", "my layer")<br>
+if not rlayer.isValid():<br>
+  print("Layer failed to load!")</code></li>
+      </ul>
+  </section>
+    <section id="Using_Raster_Layers" class="main-section">
+    <header>Using Raster Layers</header><p>A raster layer consists of one or more raster bands — it is referred to as either single band or multi band raster. One band represents a matrix of values. Usual color image (e.g. aerial photo) is a raster consisting of red, blue and green band. Single band layers typically represent either continuous variables (e.g. elevation) or discrete variables (e.g. land use). In some cases, a raster layer comes with a palette and raster values refer to colors stored in the palette:<br></p><code>rlayer.width(), rlayer.height()<br>
+(812, 301)<br>
+rlayer.extent()<br>
+qgis._core.QgsRectangle object at 0x000000000F8A2048<br>
+rlayer.extent().toString()</code>
+  </section>
+    <section id="Using_Vector_Layers" class="main-section">
+    <header>Using Vector Layers</header><p>In QGIS desktop, features can be selected in different ways, the user can click on a feature, draw a rectangle on the map canvas or use an expression filter. Selected features are normally highlighted in a different color (default is yellow) to draw user’s attention on the selection.<br>
+
+Sometimes can be useful to programmatically select features or to change the default color.<br>
+
+      To select all the features:<br></p><code># Get the active layer (must be a vector layer)<br>
+layer = iface.activeLayer()<br>
+layer.selectAll()</code>
+  </section>
+    <section id="Geometry_Handling" class="main-section">
+    <header>Geometry Handling</header><p>Points, linestrings and polygons that represent a spatial feature are commonly referred to as geometries. In QGIS they are represented with the QgsGeometry class.<br>
+
+Sometimes one geometry is actually a collection of simple (single-part) geometries. Such a geometry is called a multi-part geometry. If it contains just one type of simple geometry, we call it multi-point, multi-linestring or multi-polygon. For example, a country consisting of multiple islands can be represented as a multi-polygon.</p>
+  </section>
+    <section id="Projections_Support" class="main-section">
+    <header>Projections Support</header><p>You can do transformation between different spatial reference systems by using QgsCoordinateTransform class. The easiest way to use it is to create source and destination CRS and construct QgsCoordinateTransform instance with them and the current project. Then just repeatedly call transform() function to do the transformation. By default it does forward transformation, but it is capable to do also inverse transformation.</p>
+  </section>
+    <section id="Using_Map_Canvas" class="main-section">
+    <header>Using Map Canvas</header>
+  </section><p>The Map canvas widget is probably the most important widget within QGIS because it shows the map composed from overlaid map layers and allows interaction with the map and layers. The canvas shows always a part of the map defined by the current canvas extent. The interaction is done through the use of map tools: there are tools for panning, zooming, identifying layers, measuring, vector editing and others. Similar to other graphics programs, there is always one tool active and the user can switch between the available tools.
+</p><p>Map canvas is implemented as QgsMapCanvas class in qgis.gui module. The implementation is based on the Qt Graphics View framework. This framework generally provides a surface and a view where custom graphics items are placed and user can interact with them. We will assume that you are familiar enough with Qt to understand the concepts of the graphics scene, view and items. If not, please make sure to read the overview of the framework.</p>
+    <section id="Map_Rendering_and_Printing" class="main-section">
+    <header>Map Rendering and Printing</header><p>Despite our constant efforts, information beyond this line may not be updated for QGIS 3. Refer to https://qgis.org/pyqgis/master for the python API documentation or, give a hand to update the chapters you know about. Thanks.</p>
+  </section>
+    <section id="Expressions_Filtering_and_Calculating_Values" class="main-section">
+    <header>Expressions Filtering and Calculating Values</header><p>QGIS has some support for parsing of SQL-like expressions. Only a small subset of SQL syntax is supported. The expressions can be evaluated either as boolean predicates (returning True or False) or as functions (returning a scalar value). See Expressions in the User Manual for a complete list of available functions.</p><p>Three basic types are supported:</p><ul><li>number — both whole numbers and decimal numbers, e.g. 123, 3.14</li><li>string — they have to be enclosed in single quotes: 'hello world'</li><li>column reference — when evaluating, the reference is substituted with the actual value of the field. The names are not escaped.</li></ul>
+  </section>
+    <section id="Reading_And_Storing_Settings" class="main-section">
+    <header>Reading And Storing Settings</header><p>Many times it is useful for a plugin to save some variables so that the user does not have to enter or select them again next time the plugin is run.</p>
+
+<p>These variables can be saved and retrieved with help of Qt and QGIS API. For each variable, you should pick a key that will be used to access the variable — for user’s favourite color you could use key “favourite_color” or any other meaningful string. It is recommended to give some structure to naming of keys.</p>
+  </section>
+    <section id="Communicating_with_the_user" class="main-section">
+    <header>Communicating with the user</header><p>Using message boxes can be a bad idea from a user experience point of view. For showing a small info line or a warning/error messages, the QGIS message bar is usually a better option.<br>
+
+Using the reference to the QGIS interface object, you can show a message in the message bar with the following code:</p><code>from qgis.gui import QgsMessageBar<br>
+iface.messageBar().pushMessage("Error", "I'm sorry Dave, I'm afraid I can't do that", level=Qgis.Critical)</code>
+  </section>
+</main>
+</html>
